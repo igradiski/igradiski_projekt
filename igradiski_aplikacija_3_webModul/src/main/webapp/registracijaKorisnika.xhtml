@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Registracija korisnika</title>
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <div style="text-align: right">
+                <p:commandLink value="#{prijavaKorisnika.prijavaString}" action ="#{prijavaKorisnika.odjavaKorisnika()}"></p:commandLink> 
+            </div>
+            <p:growl />
+            <div  align="center" style="width: 400px">
+                <p:panel>
+                    <f:facet name="header">Registracija korisnika</f:facet>
+                    <h:panelGrid columns="2">
+                        Korisnicko ime:
+                        <h:inputText  id="username" value="#{prijavaKorisnika.korisnikRegistracija}"/>&nbsp;
+                        Lozinka:
+                        <h:inputSecret id="password" value="#{prijavaKorisnika.lozinkaRegistracija}"/>&nbsp;
+                        
+                    </h:panelGrid>
+                    <p:commandButton value="Registriraj" action="#{prijavaKorisnika.RegistrirajKorisnika()}">
+                    <f:ajax   render="@form " execute="ime korime" delay="300" ></f:ajax>
+                    </p:commandButton>
+                </p:panel>
+                <br></br>
+                <p:dataTable value ="#{prijavaKorisnika.korisnici}" var="a" rows="#{prijavaKorisnika.brojRedova}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prijavaKorisnika.brojRedovaTablice()},10,50,100">
+                        <p:column>  
+                            <f:facet name="header">ID:</f:facet>#{a.id}
+                        </p:column>
+                    <p:column sortBy="#{a.korisnickoIme}">  
+                            <f:facet name="header">Korisnicko ime:</f:facet>#{a.korisnickoIme}
+                        </p:column>
+                       
+                    </p:dataTable>              
+            </div>
+        </h:form>     
+       
+    </h:body>
+</html>
+

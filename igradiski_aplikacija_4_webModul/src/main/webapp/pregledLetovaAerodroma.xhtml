@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{prijavaKorisnikaApp4.jezik}">
+        <h:head>
+            <title>#{p['pregledAerodroma.Title']}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        </h:head>
+        <h:body>
+            <h:form>
+                <div style="text-align: right">
+                    <p:commandButton value="#{p['prijava.vratiSe']}" action="#{pregledLetovaApp4.povratakNaPrijavu}"/>
+                </div>
+
+                <div>
+                    #{p['pregledLetova.vrijemeOD']}
+                    <h:inputText  id="from"  value="#{pregledLetovaApp4.vrijemeOd}"/>&nbsp;
+                     #{p['pregledLetova.vrijemeDO']}
+                     <h:inputText  id="to"  value="#{pregledLetovaApp4.vrijemeDo}"/>&nbsp;
+                    
+                    
+                    
+                    <p:dataTable id="tab1" value ="#{pregledLetovaApp4.listaMojihAerodroma}" var="a" rows="#{prikazAerodromaApp4.brojRedovaTablice}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prikazAerodromaApp4.dohvatiBrojRedova()},10,50,100">
+                        <p:column headerText="IDENT">  
+                            <f:facet name="vrijeme">IDENT</f:facet>#{a.icao}
+                        </p:column>
+                         <p:column headerText="#{p['pregledLetova.naziv']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{a.naziv}
+                        </p:column>
+                         <p:column headerText="#{p['pregledLetova.drzava']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.drzava']}</f:facet>#{a.drzava}
+                        </p:column>
+                        <p:column headerText="#{p['pregledLetova.drzava']}">  
+                            <p:commandButton value="#{p['pregledLetova.DohvatiLetove']}" action="#{pregledLetovaApp4.dohvatiAvione(a)}">
+                                <f:ajax   render="@form ls1 tab2" execute="ime korime username" delay="1500" ></f:ajax>
+                            </p:commandButton>
+                        </p:column>
+                        
+                    </p:dataTable>
+                     <br></br>
+                     <p:dataTable id="tab2"  value ="#{pregledLetovaApp4.listaAvionaAerodroma}" var="a" rows="#{prikazAerodromaApp4.brojRedovaTablice}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prikazAerodromaApp4.dohvatiBrojRedova()},10,50,100">
+                        <p:column headerText="#{p['pregledLetova.nazivAviona']}">  
+                            <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{a.icao24}
+                        </p:column>
+                         <p:column sortBy="#{a.firstSeen}" headerText="#{p['pregledLetova.vrijemeOD']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{pregledLetovaApp4.preracunajUnixUDatum(a.firstSeen)}
+                        </p:column>
+                         <p:column sortBy="#{a.lastSeen}" headerText="#{p['pregledLetova.vrijemeDO']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{pregledLetovaApp4.preracunajUnixUDatum(a.lastSeen)}
+                        </p:column>
+                         <p:column headerText="#{p['pregledLetova.nazivAerodroma']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{a.estArrivalAirport}
+                        </p:column>
+                        <p:column headerText="#{p['pregledLetova.nazivAerodroma']}">  
+                             <p:commandButton value="#{p['pregledLetova.DohvatiLetoveAviona']}" action="#{pregledLetovaApp4.dohvatiLetAviona(a)}">
+                                <f:ajax   render="@form ls1 tab2 tab3" execute="ime korime username" delay="3000" ></f:ajax>
+                            </p:commandButton>
+                        </p:column>
+                        
+                    </p:dataTable>
+                     <br></br>
+                     
+                     <p:dataTable id="tab3"  value ="#{pregledLetovaApp4.listaLetovaAviona}" var="a" rows="#{prikazAerodromaApp4.brojRedovaTablice}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prikazAerodromaApp4.dohvatiBrojRedova()},10,50,100">
+                        <p:column headerText="#{p['pregledLetova.nazivAviona']}">  
+                            <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{a.icao24}
+                        </p:column>
+                         <p:column sortBy="#{a.firstSeen}" headerText="#{p['pregledLetova.vrijemeOD']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{pregledLetovaApp4.preracunajUnixUDatum(a.firstSeen)}
+                        </p:column>
+                         <p:column sortBy="#{a.lastSeen}" headerText="#{p['pregledLetova.vrijemeDO']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{pregledLetovaApp4.preracunajUnixUDatum(a.lastSeen)}
+                        </p:column>
+                         <p:column headerText="#{p['pregledLetova.nazivAerodroma']}">  
+                             <f:facet name="vrijeme">#{p['pregledLetova.naziv']}</f:facet>#{a.estArrivalAirport}
+                        </p:column>
+                        
+                        
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </h:body>
+    </f:view> 
+</html>

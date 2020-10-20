@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Start Page</title>
+
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+    </body>
+    <script type="text/javascript">
+                    var wsocket;
+                    function connect() {
+                        wsocket = new WebSocket("ws://localhost:8084/igradiski_web_modul_1/app2Socket");
+                        wsocket.onmessage = onMessage;
+                    }
+                    function onMessage(evt) {
+                     var zadnjipodaci = evt.data;
+                     console.log("Stiglo je : "+zadnjipodaci);
+                     document.getElementById("posljednjiPodaci").innerHTML=zadnjipodaci;
+                    }
+                    window.addEventListener("load", connect, false);
+                </script>       
+                <h1 id="posljednjiPodaci"></h1>
+</html>

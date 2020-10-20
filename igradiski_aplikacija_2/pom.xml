@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.foi.nwtis.igradiski</groupId>
+    <artifactId>igradiski_aplikacija_2</artifactId>
+    <version>1.0</version>
+    <packaging>ear</packaging>
+
+    <name>igradiski_aplikacija_2</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+  
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <version>8</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <ejbModule>
+                            <groupId>org.foi.nwtis.igradiski</groupId>
+                            <artifactId>igradiski_modul_1</artifactId>
+                            <unpack>true</unpack>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>org.foi.nwtis.igradiski</groupId>
+                            <artifactId>igradiski_modul_2</artifactId>
+                            <unpack>true</unpack>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>org.foi.nwtis.igradiski</groupId>
+                            <artifactId>igradiski_web_modul_1</artifactId>
+                            <unpack>true</unpack>
+                        </webModule>
+                    </modules> 
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>igradiski_modul_1</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type> 
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>igradiski_modul_2</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type> 
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>igradiski_web_modul_1</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.metro</groupId>
+            <artifactId>webservices-rt</artifactId>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency> 
+    </dependencies>
+</project>

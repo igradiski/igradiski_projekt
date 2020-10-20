@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{prijavaKorisnikaApp4.jezik}">
+    <h:head>
+    </h:head>
+    <h:body>
+       <div>
+           <h:form>  
+               <h:selectOneRadio value ="#{prijavaKorisnikaApp4.jezik}">
+                   <f:selectItem itemLabel="#{p['prijava.hrvatski']}" itemValue="hr"></f:selectItem>&nbsp;
+                   <f:selectItem itemLabel="#{p['prijava.engleski']}" itemValue="en"></f:selectItem>
+               </h:selectOneRadio>
+               <h:commandButton value="#{p['prijava.odaberiJezik']}" action="#{prijavaKorisnikaApp4.odaberiJezik}">
+               </h:commandButton>
+               <div  align="center" style="width: 400px">
+                <p:panel>
+                    <f:facet name="header">#{p['prijava.naslovPrijave']}</f:facet>
+                    <h:panelGrid columns="2">
+                        #{p['prijava.korisnickoIme']}
+                        <h:inputText  id="username"  value="#{prijavaKorisnikaApp4.korisnik}"/>&nbsp;
+                        #{p['prijava.lozinka']}
+                        <h:inputSecret id="password"  value="#{prijavaKorisnikaApp4.lozinka}"/>&nbsp;
+                        
+                    </h:panelGrid>
+                    <p:commandButton value="#{p['prijava.naslovPrijave']}" action="#{prijavaKorisnikaApp4.PrijaviKorisnika}"/>
+                </p:panel>
+                
+                
+            </div>
+                  
+           </h:form>
+           
+           
+       </div>
+       
+       
+    </h:body>
+        </f:view> 
+</html>
+

@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+
+-->
+<faces-config version="2.3"
+              xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd">
+
+    <application>
+        <locale-config>
+            <default-locale>hr</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        <resource-bundle>
+            <base-name> org.foi.nwtis.igradiski.web.Prijevod
+            </base-name>
+            <var>p</var>
+        </resource-bundle>
+    </application> 
+     
+    <navigation-rule>
+        
+        <from-view-id>prijava.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{prijavaKorisnikaApp4.PrijaviKorisnika}</from-action>
+            <to-view-id>/glavniIzbornik.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>glavniIzbornik.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{prijavaKorisnikaApp4.prikaziPregledLetova}</from-action>
+            <to-view-id>/pregledLetovaAerodroma.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-action>#{prijavaKorisnikaApp4.prikaziMojeAerodrome}</from-action>
+            <to-view-id>/pregledVlastitihAerodroma.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-action>#{prijavaKorisnikaApp4.prikaziAerodrome}</from-action>
+            <to-view-id>/prikazAerodroma.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-action>#{prijavaKorisnikaApp4.povratakNaPrijavu}</from-action>
+            <to-view-id>/prijava.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>prikazAerodroma.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{prikazAerodromaApp4.povratakNaPrijavu}</from-action>
+            <to-view-id>/prijava.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>pregledLetovaAerodroma.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{pregledLetovaApp4.povratakNaPrijavu}</from-action>
+            <to-view-id>/prijava.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+    </navigation-rule>
+    <navigation-rule>
+        <from-view-id>pregledVlastitihAerodoma.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{mojiAerodromiApp4.povratakNaPrijavu}</from-action>
+            <to-view-id>/prijava.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+    </navigation-rule>
+
+</faces-config>

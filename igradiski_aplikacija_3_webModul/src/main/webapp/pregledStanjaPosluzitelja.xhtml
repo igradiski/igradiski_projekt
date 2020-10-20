@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pregled posluzitelja</title>
+    </h:head>
+
+    <h:body>
+        <h2>#{p['izbornik.naslov']}</h2>
+        <h:form>
+             <div style="text-align: right">
+                <p:commandLink value="#{prijavaKorisnika.prijavaString}" action ="#{prijavaKorisnika.odjavaKorisnika()}"></p:commandLink> 
+            </div>
+            
+            <div>
+                <h3>Stanje posluzitelja:</h3>
+                <h:outputText id="name" value = "#{statusPosluzitelja.stanjePosluzitelja}" /><br></br><br></br>
+                <p:commandButton  value="Dohvati stanje posluzitelja" action="#{statusPosluzitelja.dohvatiStanje()}">
+                    <f:ajax   render="@form name" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                <p:commandButton  value="Prebaci posluzitelj u pasivni rad" action="#{statusPosluzitelja.prebaciPosluziteljaUPasivniMod()}">
+                    <f:ajax   render="@form name" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                <p:commandButton  value="Prebaci posluzitelj u aktivni rad" action="#{statusPosluzitelja.prebaciPosluziteljaUAktivniMod()}">
+                    <f:ajax   render="@form name" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                <br></br><br></br>
+                <p:commandButton  value="Ugasi posluzitelja" action="#{statusPosluzitelja.posaljiKomanduKraj()}">
+                    <f:ajax   render="@form name" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+            </div>
+            <div>
+                <h3>Upravljanje grupama:</h3>
+                <h:outputText id="grupaInfo" value = "#{statusPosluzitelja.stanjeGrupe}" /><br></br><br></br>
+                
+                <p:commandButton  value="Prijavi grupu" action="#{statusPosluzitelja.prijaviGrupu()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                
+                <p:commandButton  value="Odjavi grupu" action="#{statusPosluzitelja.odjaviGrupu()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                
+                <p:commandButton  value="Aktiviraj grupu" action="#{statusPosluzitelja.aktivirajGrupu()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                
+                <p:commandButton  value="Blokiraj grupu" action="#{statusPosluzitelja.blokirajGrupu()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+                
+                <p:commandButton  value="Stanje grupe" action="#{statusPosluzitelja.dohvatiStanjeGrupe()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+
+                <p:commandButton  value="Grupa aerodromi" action="#{statusPosluzitelja.dodajAerodrome()}">
+                    <f:ajax   render="@form name grupaInfo" execute="" delay="300" ></f:ajax>
+                </p:commandButton>
+            </div>
+            
+        </h:form>     
+    </h:body>
+</html>
+

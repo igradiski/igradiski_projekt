@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{prijavaKorisnikaApp4.jezik}">
+        <h:head>
+            <title>#{p['pregledAerodroma.Title']} pregledAerodroma.Title</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        </h:head>
+        <h:body>
+            <script type="text/javascript">
+                    var wsocket;
+                    function connect() {
+                        wsocket = new WebSocket("ws://localhost:8084/igradiski_web_modul_1/app2Socket");
+                        wsocket.onmessage = onMessage;
+                    }
+                    function onMessage(evt) {
+                        var podaciAerodroma = evt.data;
+                        const vrijemePoruke = new Date().toLocaleString();
+                       document.getElementById("socketText").innerHTML=podaciAerodroma;
+                       document.getElementById("socketVrijeme").innerHTML=vrijemePoruke;
+                    }
+                    function posaljiPodatke(ident, korime){
+                        wsocket.send(korime+";"+ident);
+                         wsocket.onmessage = onMessage;
+                     return true;
+                    }
+                    window.addEventListener("load", connect, false);
+                </script> 
+             <div>
+                
+                <p:panel>
+                    <f:facet name="header">#{p['pregledAerodromaPodaci']}</f:facet>
+                    <p:panelGrid columns="2">
+                        <p>#{p['pregledAerodroma.brojaAerodroma']}</p>
+                        <h:outputText id="socketText"></h:outputText>
+                        <p>#{p['pregledAerodroma.vrijemePreuzimanja']}</p>
+                        <h:outputText id="socketVrijeme"></h:outputText>  
+                    </p:panelGrid>
+                </p:panel>
+                
+               
+            </div>
+            
+            <h:form>
+                
+            <div style="text-align: right">
+                <p:commandButton value="#{p['prijava.vratiSe']}" action="#{prikazAerodromaApp4.povratakNaPrijavu}"/>
+            </div>
+
+                <div>
+                    <p:dataTable value ="#{prikazAerodromaApp4.listaMojihAerodroma}" var="a" rows="#{prikazAerodromaApp4.brojRedovaTablice}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prikazAerodromaApp4.dohvatiBrojRedova()},10,50,100">
+                        <p:column headerText="IDENT">  
+                            <f:facet name="vrijeme">IDENT</f:facet>#{a.ident.ident}
+                        </p:column>
+                        <p:column headerText="#{p['pregledAerodroma.korisnik']}">  
+                            <f:facet name="poruka">#{p['pregledAerodroma.korisnik']}</f:facet>#{a.username}
+                        </p:column>
+                        <p:column headerText="#{p['pregledAerodroma.Spremljeno']}">  
+                            <f:facet name="korisnika">#{p['pregledAerodroma.Spremljeno']}</f:facet>#{a.stored}
+                        </p:column>
+                        <p:column headerText="Id">  
+                            <f:facet name="poruka">#{p['pregledAerodroma.brojKorisnika']}</f:facet>#{prikazAerodromaApp4.dohvatiBrojKorisnika(a)}
+                        </p:column >
+                        <p:column headerText="#{p['pregledAerodroma.brojDana']}">  
+                            <f:facet name="poruka">#{p['pregledAerodroma.brojDana']}</f:facet>#{prikazAerodromaApp4.dohvatiBrojDana(a)}
+                        </p:column >
+                        <p:column headerText="#{p['pregledAerodroma.brojLetova']}">  
+                            <f:facet name="poruka">#{p['pregledAerodroma.brojLetova']}</f:facet>#{prikazAerodromaApp4.dohvatiBrojLetova(a)}
+                        </p:column>
+                        <p:column headerText="#{p['pregledAerodroma.brojDana']}">
+                            <p:commandButton  value="#{p['pregledAerodroma.brojDana']}" action="#{prikazAerodromaApp4.prikaziPodatkeAerodroma(a)}">
+                                <f:ajax   render="@form sirina duzina" execute="ime korime" delay="300" ></f:ajax>
+                            </p:commandButton>
+                         </p:column>
+                    </p:dataTable>      
+                    <p>Geografska sirina: </p>
+                    <h:outputText id="sirina" value="#{prikazAerodromaApp4.geoSirina}"></h:outputText>
+                    <br></br>
+                    <p>Geografska duzina: </p>
+                    <h:outputText id="duzina" value="#{prikazAerodromaApp4.geoDuzina}"></h:outputText>
+                    <p>Temperatura: </p>
+                    <h:outputText id="temp" value="#{prikazAerodromaApp4.temperatura}"></h:outputText>
+                    <p>Vlaga: </p>
+                    <h:outputText id="vlaga" value="#{prikazAerodromaApp4.vlaga}"></h:outputText>
+                </div>
+                
+                <div>
+                     #{p['pregledAerodroma.imeAerodroma']}
+                     <h:inputText  id="username"  value="#{prikazAerodromaApp4.odabraniAerodrom}"/>&nbsp;
+                     <p:commandButton  value="#{p['pregledAerodroma.prikaziAerodrome']}" action="#{prikazAerodromaApp4.dohvatiAerodromeIme()}">
+                        <f:ajax   render="ls1" execute="ime korime username" delay="300" ></f:ajax>
+                    </p:commandButton><br></br>
+                </div>
+                
+                 <h:selectOneListbox id="ls1" value="#{prikazAerodromaApp4.imeAerodroma}" size="10">
+                        <f:selectItems value="#{prikazAerodromaApp4.listaAerodroma}" var="k" 
+                                       itemLabel="#{k.ident}  #{k.name}" itemValue="#{k.ident}">
+                        </f:selectItems>
+             </h:selectOneListbox>
+            
+             <p:commandButton  value="#{p['pregledAerodroma.dodajAerodromUVlastite']}" action="#{prikazAerodromaApp4.dodajAerodromUBazu()}">
+                        <f:ajax   render="ls1" execute="ime korime username" delay="300" ></f:ajax>
+             </p:commandButton><br></br>
+                </h:form>
+            
+           
+        </h:body>
+    </f:view> 
+</html>

@@ -1,0 +1,195 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package org.foi.nwtis.igradiski.web.dretve;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.foi.nwtis.igradiski.konfiguracije.bp.BP_Konfiguracija;
+import org.foi.nwtis.igradiski.web.podaci.KorisnikDAO;
+
+/**
+ *
+ * @author Korisnik
+ */
+public class ZahtjevDretva extends Thread {
+
+    ReentrantLock lock;
+    Socket veza;
+    String odgovorServera="";
+    BP_Konfiguracija konf;
+    
+    
+    @Override
+    public void interrupt() {
+        super.interrupt(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            synchronized (this) {
+                if (veza != null) {
+                    lock.lock();
+                    System.out.println("Dretva zahtjeva!");
+                    obradiZahtjev();
+                    veza = null;
+                }
+                if (lock.isLocked()) {
+                    lock.unlock();
+                }
+            }
+        }
+    }
+
+    @Override
+    public synchronized void start() {
+        super.start(); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void obradiZahtjev(){
+        try {
+            InputStream inps = this.veza.getInputStream();
+            OutputStream outs = this.veza.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(outs);
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            while (true) {
+                int i = inps.read();
+                if (i == -1) {
+                    break;
+                }
+                output.write(i);
+            }
+            byte outputByteova[] = output.toByteArray();
+            String vrijednost = new String(outputByteova, "UTF-8");
+            OdrediKomanduGrupiKorisniku(vrijednost);
+            osw.write(odgovorServera);
+            osw.flush();
+            veza.shutdownOutput();
+            veza.shutdownInput();
+            veza.close();
+        } catch (IOException ex) {
+        }
+    }
+
+    private void ObradiZahtjevKlijenta(String vrijednost) {
+        String sintaksa = "(KORISNIK [a-z|A-Z|0-9|_|-|!|#|*]{1,50}; )(LOZINKA [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)( DODAJ [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)"
+                + "?( PAUZA [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)?( KRAJ [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)"
+                + "?( STANJE [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)?( RADI [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)?";
+        Pattern pattern = Pattern.compile(sintaksa);
+        Matcher m = pattern.matcher(vrijednost);
+        if (m.matches()) {
+            String[] komande = vrijednost.split(";");
+            if (komande.length == 2) {
+                ProvjeriKorisnikaBaza(komande);
+            } else {
+                ObradiKomandu(komande);
+            }
+        } else {
+            //kriva komanda
+        }
+
+    }
+    
+    private void OdrediKomanduGrupiKorisniku(String vrijednost){
+        if(vrijednost.contains("GRUPA")){
+            ObradiZahtjevGrupe(vrijednost);
+        }
+        else{
+            ObradiZahtjevKlijenta(vrijednost);
+        }
+    }
+    
+    private void ObradiZahtjevGrupe(String vrijednost) {
+        String sintaksa = "(KORISNIK [a-z|A-Z|0-9|_|-|!|#|*]{1,50}; )(LOZINKA [a-z|A-Z|0-9|_|-|!|#|*|-]{1,50};)( DODAJ;)?( PRIJAVI;)?( ODJAVI;)?( AKTIVIRAJ;)?( BLOKIRAJ;)?( STANJE;)?( AERODROMI [a-z|A-Z|0-9|_|-|!|#|*|,|-]{1,500};)?";
+        Pattern pattern = Pattern.compile(sintaksa);
+        Matcher m = pattern.matcher(vrijednost);
+        if (m.matches()) {
+            String[] komande = vrijednost.split(";");
+            if (komande.length == 2) {
+                ProvjeriKorisnikaBaza(komande);
+            } else {
+                ObradiKomanduGrupe(komande);
+            }
+        }
+        else{
+            //kriva
+        }
+    }
+    private void ProvjeriKorisnikaBaza(String [] komande){
+        KorisnikDAO korisnik = new KorisnikDAO(konf);
+        String korisnickoIme=komande[0];
+        String lozinka = komande[1];
+        boolean postoji= korisnik.ProvjeriPostojanjeKorisnika(korisnickoIme, lozinka);
+        if(postoji){
+            odgovorServera="OK 10;";
+        }
+        else{
+            odgovorServera="ERR 11;";
+        }
+    }
+    
+    private void ObradiKomandu(String[] komande) {
+        String korisnickoIme = komande[0];
+        String lozinka = komande[1];
+        KorisnikDAO korisnik = new KorisnikDAO(konf);
+        boolean postoji = korisnik.ProvjeriPostojanjeKorisnika(korisnickoIme, lozinka);
+        if (postoji) {
+            if (komande[3].contains("DODAJ")) {
+                //TODO DODAJ KORISNIKA
+            }
+            if (komande[3].contains("PAUZA")) {
+                //TODO pauza
+            }
+            if (komande[3].contains("RADI")) {
+                //TODO
+            }
+            if (komande[3].contains("KRAJ")) {
+                //TODO
+            }
+            if (komande[3].contains("STANJE")) {
+                //TODO
+            }
+        }
+    }
+    
+    private void ObradiKomanduGrupe(String [] komande){
+        String korisnickoIme = komande[0];
+        String lozinka = komande[1];
+        KorisnikDAO korisnik = new KorisnikDAO(konf);
+        boolean postoji = korisnik.ProvjeriPostojanjeKorisnika(korisnickoIme, lozinka);
+        if (postoji) {
+            ProvjeriIzvrsiTipKomande(komande[3]);
+        }
+    }
+    
+    private void ProvjeriIzvrsiTipKomande(String komanda){
+        if(komanda.contains("PRIJAVI")){
+            
+        }
+        if(komanda.contains("ODJAVI")){
+            
+        }
+        if(komanda.contains("AKTIVIRAJ")){
+            
+        }
+        if(komanda.contains("BLOKIRAJ")){
+            
+        }
+        if(komanda.contains("STANJE")){
+            
+        }
+        if(komanda.contains("AERODROMI")){
+            
+        }
+    }
+}

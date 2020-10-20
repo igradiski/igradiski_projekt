@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Pregled MQTT PORUKA</title>
+    </h:head>
+
+    <h:body>
+        <h:form>
+             <div style="text-align: right">
+                <p:commandLink value="#{prijavaKorisnika.prijavaString}" action ="#{prijavaKorisnika.odjavaKorisnika()}"></p:commandLink> 
+            </div>
+            <p:commandButton  value="Obrisi  SVE MQTT poruke" action="#{prijavaKorisnika.obrisiSvePoruke()}">
+                    <f:ajax   render="@form" execute="ime korime" delay="300" ></f:ajax>
+               </p:commandButton><br></br>
+               <p:dataTable value ="#{prijavaKorisnika.poruke}" var="a" rows="#{prijavaKorisnika.brojRedova}" paginator="true" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowsPerPageTemplate="#{prijavaKorisnika.brojRedovaTablice()},10,50,100">
+                <p:column>  
+                    <f:facet name="vrijeme">Vrijeme</f:facet>#{a.vrijeme}
+                </p:column>
+                <p:column>  
+                    <f:facet name="poruka">Poruka:</f:facet>#{a.poruka}
+                </p:column>
+                <p:column>  
+                    <f:facet name="korisnika">Korisnik</f:facet>#{a.korisnik}
+                </p:column>
+                <p:column sortBy="#{a.aerodrom}">  
+                    <f:facet name="poruka">Aerodrom:</f:facet>#{a.aerodrom}
+                </p:column>
+                <p:column sortBy="#{a.avion}">  
+                    <f:facet name="poruka">Avion:</f:facet>#{a.avion}
+                </p:column>
+                <p:column>  
+                    <f:facet name="poruka">Oznaka:</f:facet>#{a.oznaka}
+                </p:column>
+                <p:column>
+                    <p:commandButton  value="Obrisi MQTT poruku" action="#{prijavaKorisnika.obrisiMQTTPoruku(a)}">
+                    <f:ajax   render="@form" execute="ime korime" delay="300" ></f:ajax>
+               </p:commandButton><br></br>
+                </p:column>
+            </p:dataTable>      
+               <p:commandButton  value="Ucitaj poruke" action="#{prijavaKorisnika.DohvatiPorukeKorisnika()}">
+                    <f:ajax   render="@form" execute="ime korime" delay="300" ></f:ajax>
+               </p:commandButton><br></br>
+        </h:form>     
+    </h:body>
+</html>
+

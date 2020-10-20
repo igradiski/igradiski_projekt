@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:view locale="#{prijavaKorisnikaApp4.jezik}">
+        <h:head>
+            <title>#{p['izbornik.naslov']}</title>
+        </h:head>
+        <h:body>
+            <h:form> 
+                <div style="text-align: right">
+                    <p:commandButton value="#{p['prijava.vratiSe']}" action="#{prijavaKorisnikaApp4.povratakNaPrijavu}"/>
+                </div>
+                
+                <div>
+                    <p:panel>
+                        <f:facet name="header">#{p['izbornik.naslov']}</f:facet>
+                        <p:panelGrid columns="2">
+                            #{p['izbornik.pregledLetova']}:
+                            <p:commandButton value="#{p['izbornik.pregledLetova']}" action="#{prijavaKorisnikaApp4.prikaziPregledLetova}">
+                            </p:commandButton><br></br>
+                            #{p['izbornik.mojiAerodromi']}:
+                            <p:commandButton value="#{p['izbornik.mojiAerodromi']}" action="#{prijavaKorisnikaApp4.prikaziMojeAerodrome}">
+                            </p:commandButton><br></br>
+                            #{p['izbornik.aerodromi']}:
+                            <p:commandButton value="#{p['izbornik.aerodromi']}" action="#{prijavaKorisnikaApp4.prikaziAerodrome}">
+                            </p:commandButton>
+                        </p:panelGrid>
+                    </p:panel>
+
+
+                </div>
+            </h:form>  
+        </h:body>
+    </f:view> 
+</html>
